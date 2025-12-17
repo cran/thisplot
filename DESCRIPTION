@@ -1,0 +1,27 @@
+Type: Package
+Package: thisplot
+Title: Utility Functions for Plotting
+Version: 0.3.1
+Date: 2025-12-11
+Authors@R: 
+    person("Meng", "Xu", email = "mengxu98@qq.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-8300-1054"))
+Maintainer: Meng Xu <mengxu98@qq.com>
+Description: Provides utility functions for plotting. Includes functions for color manipulation, plot customization, panel size control, data optimization for plots, and layout adjustments.
+License: MIT + file LICENSE
+URL: https://mengxu98.github.io/thisplot/
+BugReports: https://github.com/mengxu98/thisplot/issues
+Depends: R (>= 4.1.0)
+Imports: cli, ggplot2, gtable, htmltools, igraph, methods, patchwork,
+        stats, thisutils, utils
+Suggests: grDevices, grid, png, ragg
+Config/Needs/website: mengxu98/thistemplate
+Config/testthat/edition: 3
+Encoding: UTF-8
+RoxygenNote: 7.3.3
+Language: en-US
+LazyData: true
+NeedsCompilation: no
+Packaged: 2025-12-11 12:19:55 UTC; mx
+Author: Meng Xu [aut, cre] (ORCID: <https://orcid.org/0000-0002-8300-1054>)
+Repository: CRAN
+Date/Publication: 2025-12-17 10:10:02 UTC

@@ -1,0 +1,42 @@
+#' @title A list of palettes for use in data visualization
+#'
+#' @concept data
+#' @name palette_list
+NULL
+
+#' @title Chinese traditional colors dataset
+#'
+#' @description
+#' A dataset containing optimized traditional Chinese colors.
+#' These colors are extracted from those books:
+#' \itemize{
+#' \item{Chinese Traditional Colors - Color Aesthetics in the Forbidden City (ISBN: 9787521716054)}
+#' \item{Chinese Beautiful Colors - The Most Chinese Culture Vol.3 (ISBN: 9781672897198)}
+#' \item{Chinese Colors (ISBN: 9787558016479)}
+#' \item{Chinese Journal of Chromatography (ISSN 1000-8713)}
+#' \item{Chinese Color Atlas}
+#' }
+#'
+#' Thanks to the author of the \href{https://book.douban.com/review/14384195/}{blog} for providing the data.
+#'
+#' @concept data
+#' @name chinese_colors
+#'
+#' @examples
+#' data(chinese_colors)
+#' color_sets <- attr(chinese_colors, "color_sets")
+#' show_palettes(
+#'   list(
+#'     color_sets$ChineseSet8,
+#'     color_sets$ChineseSet16,
+#'     color_sets$ChineseSet32
+#'   )
+#' )
+#'
+#' # Use ChineseColors class
+#' cc <- ChineseColors()
+#' cc$visual_colors(
+#'   title = "Chinese Traditional Colors",
+#'   name_type = "chinese"
+#' )
+NULL
