@@ -1,7 +1,7 @@
-29dc7420fade67463f3c196770482544 *DESCRIPTION
+782d2edf4f87b8d281e5f7a1a086e581 *DESCRIPTION
 44512022f36801393bd86b0fbeb06889 *LICENSE
-e5aea2f3cebc28510cb94eecd62985cb *NAMESPACE
-fa0384a0860f49738783cb2be5adaed2 *NEWS.md
+2caa3f5c0cbd9768c3bd8dcf1905c108 *NAMESPACE
+6cd103260bccb781ac7e42e78dd4b50a *NEWS.md
 7f1bdb7846f20abe0cd25d6a226f45f6 *R/chinese_colors.R
 c1d501e52c02970078977b72d65f281e *R/colors.R
 1c17a04ff0b4ba099de51c80398f8713 *R/data.R
@@ -14,9 +14,9 @@ f84d45363afb3f62fdeeb2d919fc62b9 *R/plot.R
 ee2ea45559cfb29dd8f8a2beb01f0570 *R/slim_data.R
 f01a7e973755b6b82d3491eb2d3977c4 *R/themes.R
 e54b79bb486fcfe7516a395ab0b8fa1e *R/thisplot-package.R
-8b67964c46db6a4b7e22ed4b7af31ac8 *R/utils.R
+1042e3ca6924fd8f688fa12e7a115d96 *R/utils.R
 de5a2760b888852d7308da7ff0e63965 *R/visual_colors.R
-e8f690321ce58a4368231c7291f909e5 *README.md
+d84621856b15c64bdfff5d43a57c42f2 *README.md
 77d14bebc2b77da604577a61f7732aca *data/chinese_colors.rda
 9d6f0b9091c6336286217fcb6b826944 *data/palette_list.rda
 fd99feb5522f96b08010968c6f69f8ea *man/Blend2Color.Rd
@@ -35,13 +35,10 @@ b2903535403bfc8f031609771c66f4bc *man/chinese_colors.Rd
 b1a8c21bd75c677e9a4e910e54ebdcc5 *man/col2hex.Rd
 3f54ffc6b5fefadaed162a4da997860d *man/drop_data.Rd
 ede1c74c0849f015ece110841dfd2e09 *man/extractgrobs.Rd
-e572783a00c31d96cd4fc26236db7644 *man/figures/ChineseColors.png
-80a019932f0686930528c011a57ca318 *man/figures/ChineseColors_palettes.svg
 dfc3ab57cadc1af56e487f3195826d29 *man/figures/logo.svg
 5a17cbd605eb24b2de7a935b7959db9a *man/get_chinese_palettes.Rd
 33af73d0d5ce333edd548a112952fa41 *man/get_colors.Rd
 05faf3ab71a5876cad8495a7621782ae *man/get_legend.Rd
-944a6db2f1ce52260e6a85b79c39fe2f *man/get_namespace_fun.Rd
 6df46890f60703a503dac4b159f4b7c8 *man/get_vars.Rd
 2ad49fb7a7cef61ac859b15562112ca2 *man/grid_draw.Rd
 e28bc49753d22826383f5d293b117153 *man/head.colors.Rd
