@@ -12,6 +12,9 @@
 #' Default is `30`.
 #' @param title Optional title for the visualization.
 #' Default is `NULL`.
+#' @param label_mode Label layout mode. Default is `"auto"`, which detects
+#' the label type from `names`. Use `"chinese"`, `"pinyin"`, `"rgb"`,
+#' or `"hex"` to force a layout optimized for that label style.
 #'
 #' @return
 #' An HTML widget.
@@ -42,8 +45,11 @@ visual_colors <- function(
   colors,
   names = NULL,
   num_per_row = 30,
-  title = NULL
+  title = NULL,
+  label_mode = c("auto", "chinese", "pinyin", "rgb", "hex")
 ) {
+  label_mode <- match.arg(label_mode)
+
   if (is.null(colors) || length(colors) == 0) {
     log_message(
       "No colors provided",
@@ -64,6 +70,7 @@ visual_colors <- function(
   }
 
   n_colors <- length(colors)
+  display_names <- as.character(names)
 
   luminance <- function(hex_color) {
     rgb <- grDevices::col2rgb(hex_color) / 255
@@ -81,47 +88,145 @@ visual_colors <- function(
     grepl("[\u4e00-\u9fff]", text, perl = TRUE)
   }
 
-  cell_width_px <- 21
-  cell_height_px <- 50
+  is_hex_label <- function(text) {
+    if (is.null(text) || length(text) == 0 || is.na(text)) {
+      return(FALSE)
+    }
+    grepl("^#[A-Fa-f0-9]{6}$", text)
+  }
+
+  is_rgb_label <- function(text) {
+    if (is.null(text) || length(text) == 0 || is.na(text)) {
+      return(FALSE)
+    }
+    grepl("^\\(\\s*\\d{1,3}\\s*,\\s*\\d{1,3}\\s*,\\s*\\d{1,3}\\s*\\)$", text)
+  }
+
+  detect_label_mode <- function(texts) {
+    valid_texts <- texts[!is.na(texts) & nzchar(texts)]
+    if (length(valid_texts) == 0) {
+      return("hex")
+    }
+    if (all(vapply(valid_texts, is_chinese, logical(1)))) {
+      return("chinese")
+    }
+    if (all(vapply(valid_texts, is_hex_label, logical(1)))) {
+      return("hex")
+    }
+    if (all(vapply(valid_texts, is_rgb_label, logical(1)))) {
+      return("rgb")
+    }
+    if (all(grepl("^[A-Za-z]+$", valid_texts))) {
+      return("pinyin")
+    }
+    "pinyin"
+  }
+
+  get_label_layout <- function(mode, texts) {
+    switch(
+      mode,
+      chinese = list(
+        cell_width = 21,
+        cell_height = 50,
+        font_size = 8.5,
+        line_height = 1.08,
+        letter_spacing = "0.2px",
+        rotate = FALSE,
+        white_space = "normal",
+        font_weight = 500
+      ),
+      pinyin = list(
+        cell_width = 21,
+        cell_height = 50,
+        font_size = 9,
+        line_height = 1,
+        letter_spacing = "0px",
+        rotate = FALSE,
+        white_space = "nowrap",
+        font_weight = 500
+      ),
+      rgb = list(
+        cell_width = 21,
+        cell_height = 50,
+        font_size = 8.8,
+        line_height = 1,
+        letter_spacing = "0px",
+        rotate = FALSE,
+        white_space = "nowrap",
+        font_weight = 500
+      ),
+      hex = list(
+        cell_width = 21,
+        cell_height = 50,
+        font_size = 9,
+        line_height = 1,
+        letter_spacing = "0px",
+        rotate = FALSE,
+        white_space = "nowrap",
+        font_weight = 600
+      ),
+      list(
+        cell_width = 21,
+        cell_height = 50,
+        font_size = 8.8,
+        line_height = 1,
+        letter_spacing = "0px",
+        rotate = FALSE,
+        white_space = "nowrap",
+        font_weight = 500
+      )
+    )
+  }
+
+  layout_mode <- if (identical(label_mode, "auto")) {
+    detect_label_mode(display_names)
+  } else {
+    label_mode
+  }
+  label_layout <- get_label_layout(layout_mode, display_names)
+  cell_width_px <- label_layout$cell_width
+  cell_height_px <- label_layout$cell_height
 
   format_text_display <- function(text) {
-    if (is_chinese(text)) {
-      chars <- strsplit(text, "")[[1]]
+    if (identical(layout_mode, "chinese") && is_chinese(text)) {
+      chars <- strsplit(text, "", fixed = TRUE)[[1]]
       if (length(chars) == 1) {
         return(chars[1])
       }
-      html_str <- paste(chars, collapse = "<br>")
-      return(htmltools::HTML(html_str))
+      htmltools::HTML(paste(chars, collapse = "<br>"))
     } else {
-      return(text)
+      text
     }
   }
 
   get_text_style <- function(text, text_color) {
     base_style <- paste0(
       "color:", text_color, ";",
-      "font-size:8px;",
+      "font-size:", label_layout$font_size, "px;",
       "font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif;",
-      "letter-spacing:0.2px;",
-      "line-height:1.2;"
+      "letter-spacing:", label_layout$letter_spacing, ";",
+      "line-height:", label_layout$line_height, ";",
+      "font-weight:", label_layout$font_weight, ";"
     )
 
-    if (is_chinese(text)) {
-      return(
-        paste0(
-          base_style,
-          "display:block;",
-          "text-align:center;",
-          "width:100%;"
-        )
+    if (identical(layout_mode, "chinese") && is_chinese(text)) {
+      paste0(
+        base_style,
+        "display:block;",
+        "text-align:center;",
+        "width:100%;",
+        "white-space:normal;"
       )
     } else {
-      return(
-        paste0(
-          base_style,
-          "display:inline-block;",
-          "white-space:nowrap;"
-        )
+      paste0(
+        base_style,
+        "display:block;",
+        "white-space:", label_layout$white_space, ";",
+        "writing-mode:vertical-rl;",
+        "text-orientation:mixed;",
+        "transform:rotate(180deg);",
+        "transform-origin:center center;",
+        "text-align:center;"
       )
     }
   }
@@ -133,15 +238,19 @@ visual_colors <- function(
     idx_list, function(idxs) {
       cells <- lapply(idxs, function(i) {
         text_color <- text_color_for(colors[i])
-        text_style <- get_text_style(names[i], text_color)
-        text_content <- format_text_display(names[i])
-        is_chinese_text <- is_chinese(names[i])
-        text <- "display:flex;align-items:center;justify-content:center;width:100%;height:100%;"
-        container_style <- if (is_chinese_text) {
-          text
-        } else {
-          paste0(text, "transform:rotate(-90deg);transform-origin:center;")
-        }
+        text_style <- get_text_style(display_names[i], text_color)
+        text_content <- format_text_display(display_names[i])
+        container_base <- paste0(
+          "display:flex;",
+          "align-items:center;",
+          "justify-content:center;",
+          "width:100%;",
+          "height:100%;",
+          "box-sizing:border-box;",
+          "padding:2px 0;",
+          "overflow:hidden;"
+        )
+        container_style <- container_base
 
         htmltools::tags$td(
           style = paste0(
@@ -156,9 +265,9 @@ visual_colors <- function(
             "box-shadow:0 1px 2px rgba(0,0,0,0.2);",
             "text-align:center;",
             "vertical-align:middle;",
-            "display:table-cell;",
             "position:relative;",
-            "overflow:hidden;"
+            "overflow:hidden;",
+            "box-sizing:border-box;"
           ),
           htmltools::tags$div(
             style = container_style,
@@ -183,7 +292,8 @@ visual_colors <- function(
               "min-height:", cell_height_px, "px;",
               "border-radius:3px;",
               "background:transparent;",
-              "text-align:center;"
+              "text-align:center;",
+              "box-sizing:border-box;"
             ),
             ""
           ),

@@ -36,6 +36,8 @@
 #'
 #' # Chinese names
 #' cc$visual_colors(
+#'   loc_range = c(1, 180),
+#'   num_per_row = 30,
 #'   title = "Chinese Traditional Colors",
 #'   name_type = "chinese"
 #' )
@@ -154,7 +156,8 @@ ChineseColors <- function() {
         colors = color_col,
         names = display_name,
         num_per_row = num_per_row,
-        title = title
+        title = title,
+        label_mode = name_type
       )
     )
   }

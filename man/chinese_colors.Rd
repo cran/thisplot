@@ -21,6 +21,7 @@ data(chinese_colors)
 color_sets <- attr(chinese_colors, "color_sets")
 show_palettes(
   list(
+    color_sets$Chinese,
     color_sets$ChineseSet8,
     color_sets$ChineseSet16,
     color_sets$ChineseSet32
@@ -30,6 +31,8 @@ show_palettes(
 # Use ChineseColors class
 cc <- ChineseColors()
 cc$visual_colors(
+  loc_range = c(1, 180),
+  num_per_row = 30,
   title = "Chinese Traditional Colors",
   name_type = "chinese"
 )
